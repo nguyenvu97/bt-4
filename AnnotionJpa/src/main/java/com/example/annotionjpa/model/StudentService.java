@@ -20,6 +20,9 @@ public class StudentService {
     private final StudentJpaAccessService studentJpaAccessService;
 
     public StudentDto add(StudentDto student){
+        if (student.getAge() <= 0 || student.getStudentName().isEmpty()){
+            throw new Not_Found("error input information");
+        }
         StudentDtoImpl studentDto = new StudentDtoImpl();
         Student  student1=studentDto.dtoToEntity(student);
         studentJpaAccessService.add(student1);

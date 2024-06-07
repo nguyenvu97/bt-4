@@ -1,6 +1,7 @@
 package com.example.annotionjpa.model;
 
 import com.example.annotionjpa.dto.StudentDto;
+import com.example.annotionjpa.exception.Not_Found;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,11 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentJpaExecutor;
     @PostMapping
-    public ResponseEntity<StudentDto> addStudent(@RequestBody StudentDto student) {
+    public ResponseEntity<?> addStudent(@RequestBody StudentDto student) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(studentJpaExecutor.add(student));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Not_Found e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @GetMapping
